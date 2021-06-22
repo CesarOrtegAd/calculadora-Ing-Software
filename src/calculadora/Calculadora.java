@@ -3,23 +3,24 @@ package calculadora;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.*;
 
 public class Calculadora extends JFrame {
 
     JLabel texto;
-    JButton bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9, btdiv, btpor, btmenos, btmas, btpunto, btigual, bt16, btlimpiar;
-    JPanel panel;
+    JButton bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9, btdiv, btpor, btmenos, btmas, btpunto, btigual, bt16, btlimpiar, conMoneda, conNumericos;
+    JPanel panel, derecha, arriba;
     //PARA OPERACIONES
     double num1, num2, resultado;
     char signo;
 
     public Calculadora() {
         frame();
-        arribaYabajo();
+        paneles();
         numeros();
         botones();
         operaciones();
+        otrosFrames();
     }
 
     public void frame() {
@@ -32,21 +33,34 @@ public class Calculadora extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void arribaYabajo() {
+    public void paneles() {
+        arriba = new JPanel();
         texto = new JLabel("0");
-        texto.setBorder(new EmptyBorder(10, 10, 10, 10));
-        this.add(texto, BorderLayout.NORTH);
+        texto.setBorder(new EmptyBorder(15, 15, 15, 15));
+        Border linea = BorderFactory.createLineBorder(Color.RED, 1);
+        arriba.setBorder(linea);
+        arriba.add(texto);
 
-        btlimpiar = new JButton("Limpiar");
-        btlimpiar.setBorder(new EmptyBorder(10, 10, 10, 10));
-        this.add(btlimpiar, BorderLayout.SOUTH);
+        this.add(arriba, BorderLayout.NORTH);
+
+        derecha = new JPanel();
+        derecha.setLayout(new GridLayout(4, 1));
+        btlimpiar = new JButton("C");
+        derecha.add(btlimpiar);
+        conMoneda = new JButton("Moneda");
+        conNumericos = new JButton("Conversión");
+        derecha.add(conMoneda);
+        derecha.add(conNumericos);
+        derecha.setBorder(new EmptyBorder(3, 3, 3, 3));
+        this.add(derecha, BorderLayout.EAST);
+
     }
 
     public void numeros() {
         panel = new JPanel();
 
-        panel.setLayout(new GridLayout(4, 4));
-        panel.setBorder(new EmptyBorder(3, 3, 3, 3));
+        panel.setLayout(new GridLayout(4, 4)); //tamaño botones 
+        panel.setBorder(new EmptyBorder(3, 3, 3, 3)); //espaciogoo 
         bt1 = new JButton("1");
         bt2 = new JButton("2");
         bt3 = new JButton("3");
@@ -254,6 +268,27 @@ public class Calculadora extends JFrame {
             }
         };
         btigual.addActionListener(igual);
+    }
+
+    public void otrosFrames() {
+        ActionListener moneda = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                conversionMoneda con = new conversionMoneda();
+                con.setVisible(true);
+                dispose();
+            }
+        };
+        conMoneda.addActionListener(moneda);
+        ActionListener sistemas = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                conversionSistemasNumericos con = new conversionSistemasNumericos();
+                con.setVisible(true);
+                dispose();
+            }
+        };
+        conNumericos.addActionListener(sistemas);
     }
 
     public static void main(String[] args) {
